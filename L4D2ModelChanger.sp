@@ -41,14 +41,26 @@ Added a check to stop basemodel being same as overlay model selection (seems to 
 #define SPECIAL_MODEL_PATH_SIZE 8
 #define UNCOMMON_MODEL_PATH_SIZE 6
 #define COMMON_MODEL_PATH_SIZE 34
+#define CUSTOM_MODEL_PATH_SIZE 1
 
 enum LMCModelSectionType
 {
 	LMCModelSectionType_Human = 0,
 	LMCModelSectionType_Special,
 	LMCModelSectionType_UnCommon,
-	LMCModelSectionType_Common
+	LMCModelSectionType_Common,
+	LMCModelSectionType_Custom
 }
+
+static const String:sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
+{
+	"models/survivors/gene.mdl"
+};
+
+enum LMCCustomModelType
+{
+	LMCCustomModelType_Gene = 0
+};
 
 static const String:sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
 {
@@ -104,16 +116,14 @@ enum LMCSpecialModelType
 	LMCSpecialModelType_Boomer,
 	LMCSpecialModelType_Boomette,
 	LMCSpecialModelType_Hunter,
-	LMCSpecialModelType_Smoker,
-	LMCGene
+	LMCSpecialModelType_Smoker
 };
 
 
 static const String:sUnCommonPaths[UNCOMMON_MODEL_PATH_SIZE][] =
 {
 	"models/infected/common_male_riot.mdl",
-	"models/survivors/gene.mdl",
-	//"models/infected/common_male_mud.mdl",
+	"models/infected/common_male_mud.mdl",
 	"models/infected/common_male_ceda.mdl",
 	"models/infected/common_male_clown.mdl",
 	"models/infected/common_male_fallen_survivor.mdl",
@@ -242,8 +252,8 @@ public APLRes:AskPluginLoad2(Handle:myself, bool:late, String:error[], err_max)
 
 public Plugin:myinfo =
 {
-	name = "Left 4 Dead 2 Model Changer",
-	author = "Lux",
+	name = "Left 4 Dead 2 Model Changer (v AWOO)",
+	author = "Lux + edited by ZRMDSXA",
 	description = "Left 4 Dead Model Changer for Survivors and Infected",
 	version = PLUGIN_VERSION,
 	url = "https://forums.alliedmods.net/showthread.php?p=2449184"
@@ -868,7 +878,7 @@ public Action:ShowMenu(iClient, iArgs)
 	new Handle:hMenu = CreateMenu(CharMenu);
 	SetMenuTitle(hMenu, "Choose a Model");//1.4
 	
-	AddMenuItem(hMenu, "9", "Gene(PSO2)");
+	AddMenuItem(hMenu, "26", "Gene(PSO2)");
 	AddMenuItem(hMenu, "1", "Normal Models");
 	AddMenuItem(hMenu, "15", "Random Common");
 	AddMenuItem(hMenu, "2", "Witch");
@@ -878,7 +888,7 @@ public Action:ShowMenu(iClient, iArgs)
 	AddMenuItem(hMenu, "6", "Hunter");
 	AddMenuItem(hMenu, "7", "Smoker");
 	AddMenuItem(hMenu, "8", "Riot Cop");
-	//AddMenuItem(hMenu, "9", "MudMan");
+	AddMenuItem(hMenu, "9", "MudMan");
 	AddMenuItem(hMenu, "10", "Chopper Pilot");
 	AddMenuItem(hMenu, "11", "CEDA");
 	AddMenuItem(hMenu, "12", "Clown");
@@ -1496,6 +1506,20 @@ ModelIndex(iClient, iCaseNum, bool:bUsingMenu=false)
 			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Tank DLC");
 			bAutoApplyMsg[iClient] = false;
 		}
+		case 26:
+		{
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(LMCCustomModelType_Gene)))
+				BeWitched(iClient, sCustomPaths[LMCCustomModelType_Gene], false);
+			
+			if(IsFakeClient(iClient))
+				return;
+			
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+			
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Gene(PSO2)");
+			bAutoApplyMsg[iClient] = false;
+		}
 	}
 	bAutoApplyMsg[iClient] = false;
 }
@@ -2095,6 +2119,14 @@ bool:CheckForSameModel(iClient, LMCModelSectionType:iModelSectionType, iModelInd
 		case LMCModelSectionType_Common:
 		{
 			if(!StrEqual(sCurrentModel, sCommonPaths[iModelIndex], false))
+				return false;
+			
+			ResetDefaultModel(iClient);
+			return true;
+		}
+		case LMCModelSectionType_Custom:
+		{
+			if(!StrEqual(sCurrentModel, sCustomPaths[iModelIndex], false))
 				return false;
 			
 			ResetDefaultModel(iClient);
