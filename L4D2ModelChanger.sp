@@ -15,7 +15,20 @@ Changed glowcheck/malformed checking 1 entity and client each frame
 converted defines to enums
 added all model paths to arrays easier adding new models if i missed any
 Added a check to stop basemodel being same as overlay model selection (seems to stop clientside jiggly bones from working)
+
+v Awoo1
+
+how to add more models:
+
+1-	increase #define CUSTOM_MODEL_PATH_SIZE 3
+2-	add file path to sCustomPaths
+3-	add enum LMCCustomModelType
+4-	AddMenuItem
+5-	add case
+
 */
+
+
 
 
 #pragma semicolon 1
@@ -41,7 +54,7 @@ Added a check to stop basemodel being same as overlay model selection (seems to 
 #define SPECIAL_MODEL_PATH_SIZE 8
 #define UNCOMMON_MODEL_PATH_SIZE 6
 #define COMMON_MODEL_PATH_SIZE 34
-#define CUSTOM_MODEL_PATH_SIZE 2
+#define CUSTOM_MODEL_PATH_SIZE 3
 
 enum LMCModelSectionType
 {
@@ -55,13 +68,15 @@ enum LMCModelSectionType
 static const String:sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 {
 	"models/survivors/gene.mdl",
-	"models/survivors/raisin.mdl"
+	"models/survivors/raisin.mdl",
+	"models/survivors/emilia.mdl"
 };
 
 enum LMCCustomModelType
 {
 	MODEL_GENE = 0,
-	MODEL_RAISIN
+	MODEL_RAISIN,
+	MODEL_EMILIA
 };
 
 static const String:sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
@@ -883,6 +898,7 @@ public Action:ShowMenu(iClient, iArgs)
 	AddMenuItem(hMenu, "1", "Normal Models");
 	AddMenuItem(hMenu, "26", "Gene(PSO2)");
 	AddMenuItem(hMenu, "27", "Raisin(2hu)");
+	AddMenuItem(hMenu, "28", "Emilia(ReZero)");
 	AddMenuItem(hMenu, "15", "Random Common");
 	AddMenuItem(hMenu, "2", "Witch");
 	AddMenuItem(hMenu, "3", "Witch Bride");
@@ -1527,6 +1543,20 @@ ModelIndex(iClient, iCaseNum, bool:bUsingMenu=false)
 		{
 			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_RAISIN)))
 				BeWitched(iClient, sCustomPaths[MODEL_RAISIN], false);
+			
+			if(IsFakeClient(iClient))
+				return;
+			
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+			
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Raisin(2hu)");
+			bAutoApplyMsg[iClient] = false;
+		}
+		case 28:
+		{
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_EMILIA)))
+				BeWitched(iClient, sCustomPaths[MODEL_EMILIA], false);
 			
 			if(IsFakeClient(iClient))
 				return;
