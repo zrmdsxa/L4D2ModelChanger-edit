@@ -41,7 +41,7 @@ Added a check to stop basemodel being same as overlay model selection (seems to 
 #define SPECIAL_MODEL_PATH_SIZE 8
 #define UNCOMMON_MODEL_PATH_SIZE 6
 #define COMMON_MODEL_PATH_SIZE 34
-#define CUSTOM_MODEL_PATH_SIZE 1
+#define CUSTOM_MODEL_PATH_SIZE 2
 
 enum LMCModelSectionType
 {
@@ -54,12 +54,14 @@ enum LMCModelSectionType
 
 static const String:sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 {
-	"models/survivors/gene.mdl"
+	"models/survivors/gene.mdl",
+	"models/survivors/raisin.mdl"
 };
 
 enum LMCCustomModelType
 {
-	LMCCustomModelType_Gene = 0
+	MODEL_GENE = 0,
+	MODEL_RAISIN
 };
 
 static const String:sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
@@ -878,8 +880,9 @@ public Action:ShowMenu(iClient, iArgs)
 	new Handle:hMenu = CreateMenu(CharMenu);
 	SetMenuTitle(hMenu, "Choose a Model");//1.4
 	
-	AddMenuItem(hMenu, "26", "Gene(PSO2)");
 	AddMenuItem(hMenu, "1", "Normal Models");
+	AddMenuItem(hMenu, "26", "Gene(PSO2)");
+	AddMenuItem(hMenu, "27", "Raisin(2hu)");
 	AddMenuItem(hMenu, "15", "Random Common");
 	AddMenuItem(hMenu, "2", "Witch");
 	AddMenuItem(hMenu, "3", "Witch Bride");
@@ -1253,7 +1256,7 @@ ModelIndex(iClient, iCaseNum, bool:bUsingMenu=false)
 			if(!bUsingMenu && !bAutoApplyMsg[iClient])
 				return;
 			
-			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Gene");
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Mudman");
 			bAutoApplyMsg[iClient] = false;
 		}
 		case 10: 
@@ -1508,8 +1511,8 @@ ModelIndex(iClient, iCaseNum, bool:bUsingMenu=false)
 		}
 		case 26:
 		{
-			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(LMCCustomModelType_Gene)))
-				BeWitched(iClient, sCustomPaths[LMCCustomModelType_Gene], false);
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_GENE)))
+				BeWitched(iClient, sCustomPaths[MODEL_GENE], false);
 			
 			if(IsFakeClient(iClient))
 				return;
@@ -1518,6 +1521,20 @@ ModelIndex(iClient, iCaseNum, bool:bUsingMenu=false)
 				return;
 			
 			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Gene(PSO2)");
+			bAutoApplyMsg[iClient] = false;
+		}
+		case 27:
+		{
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_RAISIN)))
+				BeWitched(iClient, sCustomPaths[MODEL_RAISIN], false);
+			
+			if(IsFakeClient(iClient))
+				return;
+			
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+			
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Raisin(2hu)");
 			bAutoApplyMsg[iClient] = false;
 		}
 	}
