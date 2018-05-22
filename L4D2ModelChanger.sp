@@ -67,7 +67,7 @@ enum LMCModelSectionType
 
 static const String:sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 {
-	"models/survivors/gene.mdl",
+	"models/survivors/gene3.mdl",
 	"models/survivors/raisin.mdl",
 	"models/survivors/emilia.mdl"
 };
@@ -1564,7 +1564,7 @@ ModelIndex(iClient, iCaseNum, bool:bUsingMenu=false)
 			if(!bUsingMenu && !bAutoApplyMsg[iClient])
 				return;
 			
-			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Raisin(2hu)");
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Emilia(ReZero)");
 			bAutoApplyMsg[iClient] = false;
 		}
 	}
