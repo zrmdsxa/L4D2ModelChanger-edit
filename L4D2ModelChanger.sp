@@ -54,7 +54,7 @@ how to add more models:
 #define SPECIAL_MODEL_PATH_SIZE 8
 #define UNCOMMON_MODEL_PATH_SIZE 6
 #define COMMON_MODEL_PATH_SIZE 34
-#define CUSTOM_MODEL_PATH_SIZE 4
+#define CUSTOM_MODEL_PATH_SIZE 5
 
 enum LMCModelSectionType
 {
@@ -70,7 +70,8 @@ static const String:sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 	"models/survivors/gene3.mdl",
 	"models/survivors/raisin.mdl",
 	"models/survivors/emilia.mdl",
-	"models/props_vehicles/m119howitzer_static_01.mdl"
+	"models/props_vehicles/m119howitzer_static_01.mdl",
+	"models/survivors/ran.mdl"
 };
 
 enum LMCCustomModelType
@@ -78,7 +79,8 @@ enum LMCCustomModelType
 	MODEL_GENE = 0,
 	MODEL_RAISIN,
 	MODEL_EMILIA,
-	MODEL_M119HOWITZER
+	MODEL_M119HOWITZER,
+	MODEL_RAN
 };
 
 static const String:sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
@@ -899,6 +901,7 @@ public Action:ShowMenu(iClient, iArgs)
 	
 	AddMenuItem(hMenu, "1", "Normal Models");
 	AddMenuItem(hMenu, "26", "Gene(PSO2)");
+	AddMenuItem(hMenu, "30", "Ran(2hu)");
 	AddMenuItem(hMenu, "27", "Raisin(2hu)");
 	AddMenuItem(hMenu, "28", "Emilia(ReZero)");
 	AddMenuItem(hMenu, "29", "M119 Howitzer");
@@ -1574,6 +1577,20 @@ ModelIndex(iClient, iCaseNum, bool:bUsingMenu=false)
 		{
 			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_M119HOWITZER)))
 				BeWitched(iClient, sCustomPaths[MODEL_M119HOWITZER], false);
+			
+			if(IsFakeClient(iClient))
+				return;
+			
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+			
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04M119 Howitzer");
+			bAutoApplyMsg[iClient] = false;
+		}
+		case 30:
+		{
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_RAN)))
+				BeWitched(iClient, sCustomPaths[MODEL_RAN], false);
 			
 			if(IsFakeClient(iClient))
 				return;
