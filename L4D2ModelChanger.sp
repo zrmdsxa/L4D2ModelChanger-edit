@@ -54,7 +54,7 @@ how to add more models:
 #define SPECIAL_MODEL_PATH_SIZE 8
 #define UNCOMMON_MODEL_PATH_SIZE 6
 #define COMMON_MODEL_PATH_SIZE 34
-#define CUSTOM_MODEL_PATH_SIZE 5
+#define CUSTOM_MODEL_PATH_SIZE 8	//Z:***INCREASE NUMBER FOR EACH MODEL!!!***
 
 enum LMCModelSectionType
 {
@@ -65,22 +65,30 @@ enum LMCModelSectionType
 	LMCModelSectionType_Custom
 }
 
+//Z:***ADD NEW MODEL PATHS HERE!!!***
 static const String:sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 {
-	"models/survivors/gene3.mdl",
+	"models/survivors/gene4.mdl",
 	"models/survivors/raisin.mdl",
 	"models/survivors/emilia.mdl",
-	"models/props_vehicles/m119howitzer_static_01.mdl",
-	"models/survivors/ran.mdl"
+	"models/survivors/m119howitzer_static_01.mdl",
+	"models/survivors/ran.mdl",
+	"models/survivors/nyn.mdl",
+	"models/survivors/hsi.mdl",
+	"models/survivors/icg.mdl"
 };
 
+//Z:***GIVE IT AN ENUM NAME!!!***
 enum LMCCustomModelType
 {
 	MODEL_GENE = 0,
 	MODEL_RAISIN,
 	MODEL_EMILIA,
 	MODEL_M119HOWITZER,
-	MODEL_RAN
+	MODEL_RAN,
+	MODEL_NYN,
+	MODEL_HSI,
+	MODEL_ICG
 };
 
 static const String:sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
@@ -899,10 +907,15 @@ public Action:ShowMenu(iClient, iArgs)
 	new Handle:hMenu = CreateMenu(CharMenu);
 	SetMenuTitle(hMenu, "Choose a Model");//1.4
 	
+	//Z:***ADD MENU OPTION HERE*** last used #33
+
 	AddMenuItem(hMenu, "1", "Normal Models");
 	AddMenuItem(hMenu, "26", "Gene(PSO2)");
 	AddMenuItem(hMenu, "30", "Ran(2hu)");
 	AddMenuItem(hMenu, "27", "Raisin(2hu)");
+	AddMenuItem(hMenu, "33", "ICG(2hu cookie☆)");
+	AddMenuItem(hMenu, "32", "HSI(2hu cookie☆)");
+	AddMenuItem(hMenu, "31", "NYN(2hu cookie☆)");
 	AddMenuItem(hMenu, "28", "Emilia(ReZero)");
 	AddMenuItem(hMenu, "29", "M119 Howitzer");
 	AddMenuItem(hMenu, "15", "Random Common");
@@ -1598,9 +1611,53 @@ ModelIndex(iClient, iCaseNum, bool:bUsingMenu=false)
 			if(!bUsingMenu && !bAutoApplyMsg[iClient])
 				return;
 			
-			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04M119 Howitzer");
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Ran(2hu)");
 			bAutoApplyMsg[iClient] = false;
 		}
+		case 31:
+		{
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_NYN)))
+				BeWitched(iClient, sCustomPaths[MODEL_NYN], false);
+			
+			if(IsFakeClient(iClient))
+				return;
+			
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+			
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04NYN(2hu cookie☆)");
+			bAutoApplyMsg[iClient] = false;
+		}
+		case 32:
+		{
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_HSI)))
+				BeWitched(iClient, sCustomPaths[MODEL_HSI], false);
+			
+			if(IsFakeClient(iClient))
+				return;
+			
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+			
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04HSI(2hu cookie☆)");
+			bAutoApplyMsg[iClient] = false;
+		}
+		case 33:
+		{
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_ICG)))
+				BeWitched(iClient, sCustomPaths[MODEL_ICG], false);
+			
+			if(IsFakeClient(iClient))
+				return;
+			
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+			
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04ICG(2hu cookie☆)");
+			bAutoApplyMsg[iClient] = false;
+		}
+
+		//Z:***ADD NEW CASE HERE
 	}
 	bAutoApplyMsg[iClient] = false;
 }
