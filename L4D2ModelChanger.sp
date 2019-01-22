@@ -54,7 +54,7 @@ how to add more models:
 #define SPECIAL_MODEL_PATH_SIZE 8
 #define UNCOMMON_MODEL_PATH_SIZE 6
 #define COMMON_MODEL_PATH_SIZE 34
-#define CUSTOM_MODEL_PATH_SIZE 11	//Z:***INCREASE NUMBER FOR EACH MODEL!!!***
+#define CUSTOM_MODEL_PATH_SIZE 14	//Z:***INCREASE NUMBER FOR EACH MODEL!!!***
 
 enum LMCModelSectionType
 {
@@ -78,7 +78,10 @@ static const String:sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 	"models/survivors/icg.mdl",
 	"models/survivors/hk416.mdl",
 	"models/survivors/ump9.mdl",
-	"models/survivors/g41.mdl"
+	"models/survivors/g41.mdl",
+	"models/survivors/g11.mdl",
+	"models/survivors/wa2000.mdl",
+	"models/survivors/ump45.mdl"
 };
 
 //Z:***GIVE IT AN ENUM NAME!!!***
@@ -94,7 +97,10 @@ enum LMCCustomModelType
 	MODEL_ICG,
 	MODEL_HK416,
 	MODEL_UMP9,
-	MODEL_G41
+	MODEL_G41,
+	MODEL_G11,
+	MODEL_WA2000,
+	MODEL_UMP45
 };
 
 static const String:sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
@@ -913,19 +919,22 @@ public Action:ShowMenu(iClient, iArgs)
 	new Handle:hMenu = CreateMenu(CharMenu);
 	SetMenuTitle(hMenu, "Choose a Model");//1.4
 	
-	//Z:***ADD MENU OPTION HERE*** last used #36
+	//Z:***ADD MENU OPTION HERE*** last used #39
 
 	AddMenuItem(hMenu, "1", "Normal Models");
 	AddMenuItem(hMenu, "26", "Gene(PSO2)");
+	AddMenuItem(hMenu, "37", "G11(GFL)");
+	AddMenuItem(hMenu, "36", "G41(GFL)");
+	AddMenuItem(hMenu, "34", "HK416(GFL)");
+	AddMenuItem(hMenu, "39", "UMP45(GFL)");
+	AddMenuItem(hMenu, "35", "UMP9(GFL)");
+	AddMenuItem(hMenu, "38", "WA2000(GFL)");
 	AddMenuItem(hMenu, "30", "Ran(2hu)");
 	AddMenuItem(hMenu, "27", "Raisin(2hu)");
 	AddMenuItem(hMenu, "33", "ICG(2hu cookie☆)");
 	AddMenuItem(hMenu, "32", "HSI(2hu cookie☆)");
 	AddMenuItem(hMenu, "31", "NYN(2hu cookie☆)");
 	AddMenuItem(hMenu, "28", "Emilia(ReZero)");
-	AddMenuItem(hMenu, "36", "UMP9(GFL)");
-	AddMenuItem(hMenu, "34", "HK416(GFL)");
-	AddMenuItem(hMenu, "35", "UMP9(GFL)");
 	AddMenuItem(hMenu, "29", "M119 Howitzer");
 	AddMenuItem(hMenu, "15", "Random Common");
 	AddMenuItem(hMenu, "2", "Witch");
@@ -1707,6 +1716,48 @@ ModelIndex(iClient, iCaseNum, bool:bUsingMenu=false)
 			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04G41(Girls Frontline)");
 			bAutoApplyMsg[iClient] = false;
 		}
+		case 37:
+		{
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_G11)))
+				BeWitched(iClient, sCustomPaths[MODEL_G11], false);
+			
+			if(IsFakeClient(iClient))
+				return;
+			
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+			
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04G11(Girls Frontline)");
+			bAutoApplyMsg[iClient] = false;
+		}
+		case 38:
+		{
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_WA2000)))
+				BeWitched(iClient, sCustomPaths[MODEL_WA2000], false);
+			
+			if(IsFakeClient(iClient))
+				return;
+			
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+			
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04WA2000(Girls Frontline)");
+			bAutoApplyMsg[iClient] = false;
+		}
+		case 39:
+		{
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_UMP45)))
+				BeWitched(iClient, sCustomPaths[MODEL_UMP45], false);
+			
+			if(IsFakeClient(iClient))
+				return;
+			
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+			
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04UMP45(Girls Frontline)");
+			bAutoApplyMsg[iClient] = false;
+		}
 
 		//Z:***ADD NEW CASE HERE. SAVE AND COMPILE
 	}
@@ -2340,4 +2391,3 @@ ResetDefaultModel(iClient)
 		iHiddenIndex[iClient] = -1;
 	}
 }
-
