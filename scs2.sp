@@ -131,6 +131,9 @@ public void OnPluginStart()
 	HookEvent("player_spawn", Event_PlayerSpawn, EventHookMode_Post);
 	HookEvent("player_bot_replace", Event_PlayerToBot, EventHookMode_Post);
 
+	//test
+	HookEvent("survivor_rescued",Event_SurvivorRescued, EventHookMode_Post);
+
 	convarAdminsOnly = CreateConVar("l4d_csm_admins_only", "1","Changes access to the sm_csm command. 1 = Admin access only.",FCVAR_NOTIFY,true, 0.0, true, 1.0);		
 	convarZoey 		 = CreateConVar("l4d_scs_zoey", "0","Prop for Zoey. 0: Rochelle (windows), 1: Zoey (linux), 2: Nick (fakezoey)",FCVAR_NOTIFY,true, 0.0, true, 2.0);
 	convarSpawn		 = CreateConVar("l4d_scs_botschange", "1","Change new bots to least prevalent survivor? 1:Enable, 0:Disable",FCVAR_NOTIFY,true, 0.0, true, 1.0);
@@ -537,52 +540,28 @@ public void InitiateMenuAdmin2(Handle topmenu, TopMenuAction action, TopMenuObje
 		InitiateMenuAdmin(client, 0);
 	}
 }
-// *********************************************************************************
-// Cookie loading
-// *********************************************************************************
 
-public void Event_PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
-{
-	int client = GetClientOfUserId(GetEventInt(event, "userid"));
-	if(client && IsClientInGame(client) && !IsFakeClient(client) && GetClientTeam(client) == 2 && convarCookies.BoolValue)
-	{
-		CreateTimer(0.3, Timer_LoadCookie, GetClientUserId(client));
-	}
-}
-
-public Action Timer_LoadCookie(Handle timer, int userid)
-{
-	int client = GetClientOfUserId(userid);
-	char sID[2]; char sModel[64];
-
-	if(client && IsClientInGame(client) && !IsFakeClient(client) && GetClientTeam(client) == 2 && convarCookies.BoolValue && AreClientCookiesCached(client))
-	{
-		GetClientCookie(client, g_hClientID, sID, sizeof(sID));
-		GetClientCookie(client, g_hClientModel, sModel, sizeof(sModel));
-	
-		if(strlen(sID) && strlen(sModel))
-		{
-			SetEntProp(client, Prop_Send, "m_survivorCharacter", StringToInt(sID)); 
-			SetEntityModel(client, sModel); 
-		}
-	}
-	else if (client) { PrintToChat(client, "%s Couldn't load your default character. Type \x05!csm \x01to choose your \x03default \x01character.", PLUGIN_PREFIX);}
-}
 
 // *********************************************************************************
 // Bots spawn as survivor with fewest clones
 // *********************************************************************************
 
-char survivor_models[8][] = { MODEL_G41, MODEL_G11, MODEL_HK416, MODEL_UMP9, MODEL_UMP45, MODEL_WA2000,	MODEL_M4SOPMOD2, MODEL_GENE };
-char survivor_commands[8][] = { "sm_g41", "sm_g11", "sm_hk416", "sm_ump9", "sm_ump45", "sm_wa2000", "sm_m4sopmod2", "sm_gene"};
+//player randomly spawns as the 1st 4 chars
+
+char survivor_models[8][] = { MODEL_G41, MODEL_WA2000, MODEL_M4SOPMOD2, MODEL_GENE, MODEL_G11, MODEL_HK416, MODEL_UMP9, MODEL_UMP45 };
+char survivor_commands[8][] = { "sm_g41", "sm_wa2000", "sm_m4sopmod2", "sm_gene", "sm_g11", "sm_hk416", "sm_ump9", "sm_ump45"};
+//char survivor_models[8][] = { MODEL_NICK, MODEL_ROCHELLE, MODEL_COACH, MODEL_ELLIS, MODEL_BILL,	MODEL_ZOEY,	MODEL_FRANCIS, MODEL_LOUIS };
+//char survivor_commands[8][] = { "sm_nick", "sm_rochelle", "sm_coach", "sm_ellis", "sm_bill", "sm_zoey", "sm_francis", "sm_louis"};
 
 public Action Event_PlayerToBot(Handle event, char[] name, bool dontBroadcast)
 {
 	int player = GetClientOfUserId(GetEventInt(event, "player"));
 	int bot    = GetClientOfUserId(GetEventInt(event, "bot")); 
 
+	LogMessage("player to bot %i, %i",player, bot);
 	// If bot replace bot (due to bot creation)
-	if(player > 0 && GetClientTeam(player)== 2  &&  IsFakeClient(player) && convarSpawn.BoolValue) 
+	//if(player > -1 && GetClientTeam(player)== 2  &&  IsFakeClient(player) && convarSpawn.BoolValue) 
+	if(GetClientTeam(player)== 2  &&  IsFakeClient(player) && convarSpawn.BoolValue) 
 	{
 		FakeClientCommand(bot, survivor_commands[GetFewestSurvivor(bot)]);
 	}
@@ -616,10 +595,66 @@ int GetFewestSurvivor(int clientignore = -1)
 			min  = Survivors[s];
 		}
 	}
+	//LogMessage("minS %i",minS);
 	return minS;
 }
 
+public void Event_SurvivorRescued(Handle event, const char[] name, bool dontBroadcast)
+{
 
+	int victim = GetClientOfUserId(GetEventInt(event, "victim")); 
+
+	if(GetClientTeam(victim)== 2  &&  IsFakeClient(victim) && convarSpawn.BoolValue) 
+	{
+		FakeClientCommand(victim, survivor_commands[GetFewestSurvivor(victim)]);
+	}
+}
+
+// *********************************************************************************
+// Cookie loading
+// *********************************************************************************
+
+public void Event_PlayerSpawn(Handle event, const char[] name, bool dontBroadcast)
+{
+	int client = GetClientOfUserId(GetEventInt(event, "userid"));
+
+
+	if(client && IsClientInGame(client) && !IsFakeClient(client) && GetClientTeam(client) == 2 && convarCookies.BoolValue)
+	{
+		//LogMessage("player spawned %i",client);
+		CreateTimer(0.3, Timer_LoadCookie, GetClientUserId(client));
+	}
+	else if (GetClientTeam(client)== 2  &&  IsFakeClient(client) && convarSpawn.BoolValue)
+	{
+		//LogMessage("bot spawned %i",client);
+		CreateTimer(0.3, Timer_BotSpawn, client);
+		//FakeClientCommand(client, survivor_commands[GetFewestSurvivor(client)]);
+	}
+	
+}
+
+public Action Timer_LoadCookie(Handle timer, int userid)
+{
+	int client = GetClientOfUserId(userid);
+	char sID[2]; char sModel[64];
+
+	if(client && IsClientInGame(client) && !IsFakeClient(client) && GetClientTeam(client) == 2 && convarCookies.BoolValue && AreClientCookiesCached(client))
+	{
+		GetClientCookie(client, g_hClientID, sID, sizeof(sID));
+		GetClientCookie(client, g_hClientModel, sModel, sizeof(sModel));
+	
+		if(strlen(sID) && strlen(sModel))
+		{
+			SetEntProp(client, Prop_Send, "m_survivorCharacter", StringToInt(sID)); 
+			SetEntityModel(client, sModel); 
+		}
+	}
+	else if (client) { PrintToChat(client, "%s Couldn't load your default character. Type \x05!csm \x01to choose your \x03default \x01character.", PLUGIN_PREFIX);}
+}
+
+public Action Timer_BotSpawn(Handle timer, int bot){
+	FakeClientCommand(bot, survivor_commands[GetFewestSurvivor(bot)]);
+}
 
 // *********************************************************************************
 // Reequip weapons functions

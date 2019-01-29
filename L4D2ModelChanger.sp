@@ -912,7 +912,7 @@ public Action:ShowMenu(iClient, iArgs)
 	AddMenuItem(hMenu, "37", "G11(GFL)");
 	AddMenuItem(hMenu, "36", "G41(GFL)");
 	AddMenuItem(hMenu, "34", "HK416(GFL)");
-	AddMenuItem(hMenu, "40", "UMP45(GFL)");
+	AddMenuItem(hMenu, "40", "M4 SOPMOD 2(GFL)");
 	AddMenuItem(hMenu, "39", "UMP45(GFL)");
 	AddMenuItem(hMenu, "35", "UMP9(GFL)");
 	AddMenuItem(hMenu, "38", "WA2000(GFL)");
