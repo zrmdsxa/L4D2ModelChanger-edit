@@ -1,21 +1,5 @@
 /*
 
-1.9.7
-Added DeathModel forward
-
-1.9.8
-Updated DeathModel forward params
-
-1.9.9
-Updated IsSurvivorThirdPerson bool
-fixed issue with female boomers jumping showing overlay models
-
-2.0
-Changed glowcheck/malformed checking 1 entity and client each frame
-converted defines to enums
-added all model paths to arrays easier adding new models if i missed any
-Added a check to stop basemodel being same as overlay model selection (seems to stop clientside jiggly bones from working)
-
 v Awoo1
 
 how to add more models:
@@ -54,7 +38,7 @@ how to add more models:
 #define SPECIAL_MODEL_PATH_SIZE 8
 #define UNCOMMON_MODEL_PATH_SIZE 6
 #define COMMON_MODEL_PATH_SIZE 34
-#define CUSTOM_MODEL_PATH_SIZE 14	//Z:***INCREASE NUMBER FOR EACH MODEL!!!***
+#define CUSTOM_MODEL_PATH_SIZE 15	//Z:***INCREASE NUMBER FOR EACH MODEL!!!***
 
 enum LMCModelSectionType
 {
@@ -81,7 +65,8 @@ static const String:sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 	"models/survivors/g41.mdl",
 	"models/survivors/g11.mdl",
 	"models/survivors/wa2000.mdl",
-	"models/survivors/ump45.mdl"
+	"models/survivors/ump45.mdl",
+	"models/survivors/m4sopmod2.mdl"
 };
 
 //Z:***GIVE IT AN ENUM NAME!!!***
@@ -100,7 +85,8 @@ enum LMCCustomModelType
 	MODEL_G41,
 	MODEL_G11,
 	MODEL_WA2000,
-	MODEL_UMP45
+	MODEL_UMP45,
+	MODEL_M4SOPMOD2
 };
 
 static const String:sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
@@ -919,13 +905,14 @@ public Action:ShowMenu(iClient, iArgs)
 	new Handle:hMenu = CreateMenu(CharMenu);
 	SetMenuTitle(hMenu, "Choose a Model");//1.4
 	
-	//Z:***ADD MENU OPTION HERE*** last used #39
+	//Z:***ADD MENU OPTION HERE*** last used #40
 
 	AddMenuItem(hMenu, "1", "Normal Models");
 	AddMenuItem(hMenu, "26", "Gene(PSO2)");
 	AddMenuItem(hMenu, "37", "G11(GFL)");
 	AddMenuItem(hMenu, "36", "G41(GFL)");
 	AddMenuItem(hMenu, "34", "HK416(GFL)");
+	AddMenuItem(hMenu, "40", "UMP45(GFL)");
 	AddMenuItem(hMenu, "39", "UMP45(GFL)");
 	AddMenuItem(hMenu, "35", "UMP9(GFL)");
 	AddMenuItem(hMenu, "38", "WA2000(GFL)");
@@ -1756,6 +1743,20 @@ ModelIndex(iClient, iCaseNum, bool:bUsingMenu=false)
 				return;
 			
 			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04UMP45(Girls Frontline)");
+			bAutoApplyMsg[iClient] = false;
+		}
+		case 40:
+		{
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_M4SOPMOD2)))
+				BeWitched(iClient, sCustomPaths[MODEL_M4SOPMOD2], false);
+			
+			if(IsFakeClient(iClient))
+				return;
+			
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+			
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04M4 SOPMOD 2(Girls Frontline)");
 			bAutoApplyMsg[iClient] = false;
 		}
 
