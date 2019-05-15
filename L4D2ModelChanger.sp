@@ -38,7 +38,7 @@ how to add more models:
 #define SPECIAL_MODEL_PATH_SIZE 8
 #define UNCOMMON_MODEL_PATH_SIZE 6
 #define COMMON_MODEL_PATH_SIZE 34
-#define CUSTOM_MODEL_PATH_SIZE 15	//Z:***INCREASE NUMBER FOR EACH MODEL!!!***
+#define CUSTOM_MODEL_PATH_SIZE 16	//Z:***INCREASE NUMBER FOR EACH MODEL!!!***
 
 enum LMCModelSectionType
 {
@@ -66,7 +66,8 @@ static const String:sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 	"models/survivors/g11.mdl",
 	"models/survivors/wa2000.mdl",
 	"models/survivors/ump45.mdl",
-	"models/survivors/m4sopmod2.mdl"
+	"models/survivors/m4sopmod2.mdl",
+	"models/survivors/m1903.mdl"
 };
 
 //Z:***GIVE IT AN ENUM NAME!!!***
@@ -86,7 +87,8 @@ enum LMCCustomModelType
 	MODEL_G11,
 	MODEL_WA2000,
 	MODEL_UMP45,
-	MODEL_M4SOPMOD2
+	MODEL_M4SOPMOD2,
+	MODEL_M1903
 };
 
 static const String:sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
@@ -905,7 +907,7 @@ public Action:ShowMenu(iClient, iArgs)
 	new Handle:hMenu = CreateMenu(CharMenu);
 	SetMenuTitle(hMenu, "Choose a Model");//1.4
 	
-	//Z:***ADD MENU OPTION HERE*** last used #40
+	//Z:***ADD MENU OPTION HERE*** last used #41
 
 	AddMenuItem(hMenu, "1", "Normal Models");
 	AddMenuItem(hMenu, "26", "Gene(PSO2)");
@@ -913,6 +915,7 @@ public Action:ShowMenu(iClient, iArgs)
 	AddMenuItem(hMenu, "36", "G41(GFL)");
 	AddMenuItem(hMenu, "34", "HK416(GFL)");
 	AddMenuItem(hMenu, "40", "M4 SOPMOD 2(GFL)");
+	AddMenuItem(hMenu, "41", "Springfield M1903(GFL)");
 	AddMenuItem(hMenu, "39", "UMP45(GFL)");
 	AddMenuItem(hMenu, "35", "UMP9(GFL)");
 	AddMenuItem(hMenu, "38", "WA2000(GFL)");
@@ -1757,6 +1760,21 @@ ModelIndex(iClient, iCaseNum, bool:bUsingMenu=false)
 				return;
 			
 			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04M4 SOPMOD 2(Girls Frontline)");
+			bAutoApplyMsg[iClient] = false;
+		}
+
+		case 41:
+		{
+			if(!CheckForSameModel(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_M1903)))
+				BeWitched(iClient, sCustomPaths[MODEL_M1903], false);
+			
+			if(IsFakeClient(iClient))
+				return;
+			
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+			
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Springfield M1903(Girls Frontline)");
 			bAutoApplyMsg[iClient] = false;
 		}
 
