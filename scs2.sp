@@ -59,7 +59,8 @@ ConVar convarCookies;
 #define MODEL_G11 "models/survivors/g11.mdl"
 #define MODEL_UMP45 "models/survivors/ump45.mdl"
 #define MODEL_WA2000 "models/survivors/wa2000.mdl"
-#define MODEL_M4SOPMOD2 "models/survivors/m4sopmod2.mdl"
+#define MODEL_UMP40 "models/survivors/ump40.mdl"
+#define MODEL_KCBOATSLUTKASHIMA "models/infected/kcboatslutkashima.mdl"
 
 #define     NICK     	0
 #define     ROCHELLE    1
@@ -78,7 +79,8 @@ ConVar convarCookies;
 #define G11 12
 #define UMP45 13
 #define WA2000 14
-#define M4SOPMOD2 15
+#define UMP40 15
+#define KCBOATSLUTKASHIMA 16
 
 
 int    g_iSelectedClient[MAXPLAYERS+1];
@@ -99,6 +101,7 @@ public void OnPluginStart()
 	g_hClientID 	= RegClientCookie("Player_Character", "Player's default character ID.", CookieAccess_Protected);
 	g_hClientModel  = RegClientCookie("Player_Model", "Player's default character model.", CookieAccess_Protected);
 
+	//z: add console command here
 	RegConsoleCmd("sm_zoey", ZoeyUse, "Changes your survivor character into Zoey");  
 	RegConsoleCmd("sm_nick", NickUse, "Changes your survivor character into Nick");  
 	RegConsoleCmd("sm_ellis", EllisUse, "Changes your survivor character into Ellis");  
@@ -114,7 +117,9 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_g11", G11Use, "Changes your survivor character into G11");
 	RegConsoleCmd("sm_ump45", UMP45Use, "Changes your survivor character into UMP45");
 	RegConsoleCmd("sm_wa2000", WA2000Use, "Changes your survivor character into WA2000"); 
-	RegConsoleCmd("sm_m4sopmod2", M4SOPMOD2Use, "Changes your survivor character into WA2000"); 
+	RegConsoleCmd("sm_ump40", UMP40Use, "Changes your survivor character into WA2000"); 
+
+	RegConsoleCmd("sm_infected", InfectedUse, "Change infected skin");
 	
 	RegConsoleCmd("sm_z", ZoeyUse, "Changes your survivor character into Zoey");  
 	RegConsoleCmd("sm_n", NickUse, "Changes your survivor character into Nick");  
@@ -224,22 +229,25 @@ public Action WA2000Use(int client, int args)
 {  
 	SurvivorChange(client, WA2000, MODEL_WA2000, "WA2000");
 }
-public Action M4SOPMOD2Use(int client, int args)  
+public Action UMP40Use(int client, int args)  
 {  
-	SurvivorChange(client, M4SOPMOD2, MODEL_M4SOPMOD2, "M4SOPMOD2");
+	SurvivorChange(client, UMP40, MODEL_UMP40, "UMP40");
+}
+
+public Action InfectedUse(int client, int args)  
+{  
+	SurvivorChange(client, KCBOATSLUTKASHIMA, MODEL_KCBOATSLUTKASHIMA, "Infected");
 }
 
 // Function changes the survivor
 void SurvivorChange(int client, int prop, char[] model,  char[] name, bool save = true)
 {
-	if( client == 0		)  { PrintToServer("You must be in the survivor team to use this command!"); return;}
-	if(!IsSurvivor(client)){ PrintToChat(client, "You must be in the survivor team to use this command!"); 	return; }
 
 	if (IsFakeClient(client))  // if bot, change name
 	{
 		SetClientInfo(client, "name", name);
 	}
-	//SetEntProp(client, Prop_Send, "m_survivorCharacter", prop); 
+
 	SetEntityModel(client, model);
 	ReEquipWeapons(client);
 	
@@ -353,8 +361,8 @@ public Action ShowMenuAdmin(int client, int args)
 	AddMenuItem(menu, sMenuEntry, "G41"); 
 	IntToString(HK416, sMenuEntry, sizeof(sMenuEntry)); 
 	AddMenuItem(menu, sMenuEntry, "HK416"); 
-	IntToString(M4SOPMOD2, sMenuEntry, sizeof(sMenuEntry)); 
-	AddMenuItem(menu, sMenuEntry, "M4SOPMOD2"); 
+	IntToString(UMP40, sMenuEntry, sizeof(sMenuEntry)); 
+	AddMenuItem(menu, sMenuEntry, "UMP40"); 
 	IntToString(UMP9, sMenuEntry, sizeof(sMenuEntry)); 
 	AddMenuItem(menu, sMenuEntry, "UMP9"); 
 	IntToString(UMP45, sMenuEntry, sizeof(sMenuEntry)); 
@@ -412,7 +420,7 @@ public int CharMenuAdmin(Handle menu, MenuAction action, int client, int param2)
 				case G11:       {    SurvivorChange(g_iSelectedClient[client],         G11, MODEL_G11,   "G11", false);   }
 				case UMP45:       {    SurvivorChange(g_iSelectedClient[client],         UMP45, MODEL_UMP45,   "UMP45", false);   }
 				case WA2000:       {    SurvivorChange(g_iSelectedClient[client],         WA2000, MODEL_WA2000,   "WA2000", false);   }
-				case M4SOPMOD2:       {    SurvivorChange(g_iSelectedClient[client],         M4SOPMOD2, MODEL_M4SOPMOD2,   "M4SOPMOD2", false);   }
+				case UMP40:       {    SurvivorChange(g_iSelectedClient[client],         UMP40, MODEL_UMP40,   "UMP40", false);   }
 			} 
 		} 
 		case MenuAction_Cancel: { } 
@@ -548,8 +556,8 @@ public void InitiateMenuAdmin2(Handle topmenu, TopMenuAction action, TopMenuObje
 
 //player randomly spawns as the 1st 4 chars
 
-char survivor_models[8][] = { MODEL_G41, MODEL_WA2000, MODEL_M4SOPMOD2, MODEL_GENE, MODEL_G11, MODEL_HK416, MODEL_UMP9, MODEL_UMP45 };
-char survivor_commands[8][] = { "sm_g41", "sm_wa2000", "sm_m4sopmod2", "sm_gene", "sm_g11", "sm_hk416", "sm_ump9", "sm_ump45"};
+char survivor_models[8][] = { MODEL_G41, MODEL_UMP40, MODEL_WA2000, MODEL_GENE, MODEL_HK416, MODEL_G11, MODEL_UMP9, MODEL_UMP45};
+char survivor_commands[8][] = { "sm_g41", "sm_ump40", "sm_wa2000", "sm_gene", "sm_hk416", "sm_g11", "sm_ump9", "sm_ump45"};
 //char survivor_models[8][] = { MODEL_NICK, MODEL_ROCHELLE, MODEL_COACH, MODEL_ELLIS, MODEL_BILL,	MODEL_ZOEY,	MODEL_FRANCIS, MODEL_LOUIS };
 //char survivor_commands[8][] = { "sm_nick", "sm_rochelle", "sm_coach", "sm_ellis", "sm_bill", "sm_zoey", "sm_francis", "sm_louis"};
 
@@ -558,13 +566,18 @@ public Action Event_PlayerToBot(Handle event, char[] name, bool dontBroadcast)
 	int player = GetClientOfUserId(GetEventInt(event, "player"));
 	int bot    = GetClientOfUserId(GetEventInt(event, "bot")); 
 
-	LogMessage("player to bot %i, %i",player, bot);
+	//LogMessage("player to bot %i, %i",player, bot);
 	// If bot replace bot (due to bot creation)
 	//if(player > -1 && GetClientTeam(player)== 2  &&  IsFakeClient(player) && convarSpawn.BoolValue) 
 	if(GetClientTeam(player)== 2  &&  IsFakeClient(player) && convarSpawn.BoolValue) 
 	{
 		FakeClientCommand(bot, survivor_commands[GetFewestSurvivor(bot)]);
 	}
+	if(GetClientTeam(player)== 3  &&  IsFakeClient(player) && convarSpawn.BoolValue)
+	{
+		FakeClientCommand(bot, "sm_infected");
+	}
+
 }
 
 int GetFewestSurvivor(int clientignore = -1) 
@@ -595,7 +608,6 @@ int GetFewestSurvivor(int clientignore = -1)
 			min  = Survivors[s];
 		}
 	}
-	//LogMessage("minS %i",minS);
 	return minS;
 }
 
