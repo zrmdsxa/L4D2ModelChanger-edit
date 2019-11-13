@@ -237,12 +237,12 @@ static Handle:hCvar_AiChanceInfected = INVALID_HANDLE;
 static Handle:hCvar_TankModel = INVALID_HANDLE;
 static Handle:hCvar_HideDeathModel = INVALID_HANDLE;
 static Handle:hCvar_HideBotsModel = INVALID_HANDLE;
-static bool:g_bAllowTank = false;
-static bool:g_bAllowHunter = false;
-static bool:g_bAllowSmoker = false;
-static bool:g_bAllowBoomer = false;
-static bool:g_bAllowSurvivors = false;
-static bool:g_bTankModel = false;
+static bool:g_bAllowTank = true;
+static bool:g_bAllowHunter = true;
+static bool:g_bAllowSmoker = true;
+static bool:g_bAllowBoomer = true;
+static bool:g_bAllowSurvivors = true;
+static bool:g_bTankModel = true;
 static bool:g_bHideBotsModel;
 static g_iHideDeathModel;
 static g_iAiChanceSurvivor = 50;
@@ -911,7 +911,7 @@ public Action:ShowMenu(iClient, iArgs)
 	new Handle:hMenu = CreateMenu(CharMenu);
 	SetMenuTitle(hMenu, "Choose a Model");//1.4
 	
-	//Z:***ADD MENU OPTION HERE*** last used #42
+	//Z:***ADD MENU OPTION HERE*** last used #43
 
 	AddMenuItem(hMenu, "1", "Normal Models");
 	
@@ -1812,7 +1812,7 @@ ModelIndex(iClient, iCaseNum, bool:bUsingMenu=false)
 			if(!bUsingMenu && !bAutoApplyMsg[iClient])
 				return;
 			
-			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04TDA Sweet Migu Loli");
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04TDA Sweet Migu Loli(Brokaloid)");
 			bAutoApplyMsg[iClient] = false;
 		}
 	}

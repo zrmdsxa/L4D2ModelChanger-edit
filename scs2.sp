@@ -61,6 +61,7 @@ ConVar convarCookies;
 #define MODEL_WA2000 "models/survivors/wa2000.mdl"
 #define MODEL_UMP40 "models/survivors/ump40.mdl"
 #define MODEL_KCBOATSLUTKASHIMA "models/infected/kcboatslutkashima.mdl"
+#define MODEL_KCBOATSLUTYUUDACHI "models/infected/kcboatslutyuudachi.mdl"
 
 #define     NICK     	0
 #define     ROCHELLE    1
@@ -81,6 +82,7 @@ ConVar convarCookies;
 #define WA2000 14
 #define UMP40 15
 #define KCBOATSLUTKASHIMA 16
+#define KCBOATSLUTYUUDACHI 17
 
 
 int    g_iSelectedClient[MAXPLAYERS+1];
@@ -236,7 +238,21 @@ public Action UMP40Use(int client, int args)
 
 public Action InfectedUse(int client, int args)  
 {  
-	SurvivorChange(client, KCBOATSLUTKASHIMA, MODEL_KCBOATSLUTKASHIMA, "Infected");
+
+	switch (GetRandomInt(0, 1))
+	{
+    	case 0:
+    	{
+        	SurvivorChange(client, KCBOATSLUTKASHIMA, MODEL_KCBOATSLUTKASHIMA, "BOATSHIT");
+        	LogMessage("boatslut kashima");
+    	}
+    	case 1:
+    	{
+        	SurvivorChange(client, KCBOATSLUTYUUDACHI, MODEL_KCBOATSLUTYUUDACHI, "BOATSHIT");
+        	LogMessage("boatslut yuudachi");
+    	}
+	} 
+	
 }
 
 // Function changes the survivor
@@ -249,7 +265,12 @@ void SurvivorChange(int client, int prop, char[] model,  char[] name, bool save 
 	}
 
 	SetEntityModel(client, model);
-	ReEquipWeapons(client);
+
+	if (GetClientTeam(client)== 2)
+	{
+		ReEquipWeapons(client);
+	}
+	
 	
 	if (convarCookies.BoolValue && save)
 	{
@@ -575,7 +596,7 @@ public Action Event_PlayerToBot(Handle event, char[] name, bool dontBroadcast)
 	}
 	if(GetClientTeam(player)== 3  &&  IsFakeClient(player) && convarSpawn.BoolValue)
 	{
-		FakeClientCommand(bot, "sm_infected");
+		//FakeClientCommand(bot, "sm_infected");
 	}
 
 }
