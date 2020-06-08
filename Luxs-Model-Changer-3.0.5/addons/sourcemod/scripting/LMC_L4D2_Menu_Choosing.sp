@@ -48,7 +48,7 @@
 #define COMMON_MODEL_PATH_SIZE 34
 
 //Z:***INCREASE NUMBER FOR EACH MODEL!!!***
-#define CUSTOM_MODEL_PATH_SIZE 21	
+#define CUSTOM_MODEL_PATH_SIZE 23	
 
 enum ZOMBIECLASS
 {
@@ -92,9 +92,11 @@ static const char sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 	"models/survivors/m1903.mdl",
 	"models/survivors/ump40.mdl",
 	"models/survivors/tdasweetmiguloli.mdl",
-	"models/survivors/akai_haato2.mdl",
+	"models/survivors/akai_haato3.mdl",
 	"models/survivors/inubashiri_momiji.mdl",
-	"models/survivors/murasaki_shion.mdl"
+	"models/survivors/murasaki_shion2.mdl",
+	"models/survivors/ar15.mdl",
+	"models/survivors/m4a1.mdl"
 };
 //Z:***ADD NEW ENUM HERE!!!***
 enum LMCCustomModelType
@@ -119,7 +121,9 @@ enum LMCCustomModelType
 	MODEL_TDASWEETMIGULOLI,
 	MODEL_AKAIHAATO,
 	MODEL_INUBASHIRIMOMIJI,
-	MODEL_MURASAKISHION
+	MODEL_MURASAKISHION,
+	MODEL_AR15,
+	MODEL_M4A1
 };
 
 static const char sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
@@ -512,12 +516,14 @@ public Action ShowMenu(int iClient, int iArgs)
 
 	AddMenuItem(hMenu, "1", Translate(iClient, "%t", "Normal Models"));
 
-	//Z:***ADD MENU OPTION HERE*** last used 46
+	//Z:***ADD MENU OPTION HERE*** last used 48
 
 	AddMenuItem(hMenu, "45", "Inubashiri Momiji(2hu)");
 	AddMenuItem(hMenu, "26", "Gene(PSO2)");
 	AddMenuItem(hMenu, "44", "Akai Haato(Hololive)");
 	AddMenuItem(hMenu, "46", "Murasaki Shion(Hololive)");
+	AddMenuItem(hMenu, "48", "M4A1(GFL)");
+	AddMenuItem(hMenu, "47", "AR15(GFL)");
 	AddMenuItem(hMenu, "37", "G11(GFL)");
 	AddMenuItem(hMenu, "36", "G41(GFL)");
 	AddMenuItem(hMenu, "34", "HK416(GFL)");
@@ -1314,7 +1320,7 @@ void ModelIndex(int iClient, int iCaseNum, bool bUsingMenu=false)
 			if(!bUsingMenu && !bAutoApplyMsg[iClient])
 				return;
 
-			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Akai Haato (Hololive)");
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Akai Haato(Hololive)");
 			
 			SetExternalView(iClient);
 			bAutoApplyMsg[iClient] = false;
@@ -1327,7 +1333,7 @@ void ModelIndex(int iClient, int iCaseNum, bool bUsingMenu=false)
 			if(!bUsingMenu && !bAutoApplyMsg[iClient])
 				return;
 
-			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Inubashiri Momiji (2hu)");
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Inubashiri Momiji(2hu)");
 			
 			SetExternalView(iClient);
 			bAutoApplyMsg[iClient] = false;
@@ -1345,9 +1351,34 @@ void ModelIndex(int iClient, int iCaseNum, bool bUsingMenu=false)
 			SetExternalView(iClient);
 			bAutoApplyMsg[iClient] = false;
 		}
+		case 47:
+		{
+			if(IsModelValid(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_AR15)))
+				LMC_L4D2_SetTransmit(iClient, LMC_SetClientOverlayModel(iClient, sCustomPaths[MODEL_AR15]));
+
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04AR15(GFL)");
+			
+			SetExternalView(iClient);
+			bAutoApplyMsg[iClient] = false;
+		}
 
 		//Z:***ADD NEW CASE HERE. SAVE AND COMPILE
-		
+		case 48:
+		{
+			if(IsModelValid(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_M4A1)))
+				LMC_L4D2_SetTransmit(iClient, LMC_SetClientOverlayModel(iClient, sCustomPaths[MODEL_M4A1]));
+
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04M4A1(GFL)");
+			
+			SetExternalView(iClient);
+			bAutoApplyMsg[iClient] = false;
+		}
 	}
 	bAutoApplyMsg[iClient] = false;
 }
