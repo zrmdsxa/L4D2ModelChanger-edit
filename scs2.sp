@@ -52,14 +52,15 @@ ConVar convarCookies;
 //z: define model path here
 //#define MODEL_ "odels/survivors/.mdl"
 
-#define MODEL_GENE "models/survivors/gene4.mdl"
+#define MODEL_GENE "models/survivors/gene6.mdl"
 #define MODEL_HK416 "models/survivors/hk416.mdl"
-#define MODEL_UMP9 "models/survivors/ump9.mdl"
+#define MODEL_UMP9 "models/survivors/ump9_2.mdl"
 #define MODEL_G41 "models/survivors/g41.mdl"
 #define MODEL_G11 "models/survivors/g11.mdl"
-#define MODEL_UMP45 "models/survivors/ump45.mdl"
+#define MODEL_UMP45 "models/survivors/ump45_2.mdl"
 #define MODEL_WA2000 "models/survivors/wa2000.mdl"
 #define MODEL_UMP40 "models/survivors/ump40.mdl"
+
 #define MODEL_KCBOATSLUTKASHIMA "models/infected/kcboatslutkashima.mdl"
 #define MODEL_KCBOATSLUTYUUDACHI "models/infected/kcboatslutyuudachi.mdl"
 

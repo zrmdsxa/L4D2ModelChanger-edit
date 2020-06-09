@@ -48,7 +48,7 @@
 #define COMMON_MODEL_PATH_SIZE 34
 
 //Z:***INCREASE NUMBER FOR EACH MODEL!!!***
-#define CUSTOM_MODEL_PATH_SIZE 23	
+#define CUSTOM_MODEL_PATH_SIZE 24	
 
 enum ZOMBIECLASS
 {
@@ -74,7 +74,7 @@ enum LMCModelSectionType
 //Z:***ADD NEW MODEL PATHS HERE!!!***
 static const char sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 {
-	"models/survivors/gene4.mdl",
+	"models/survivors/gene6.mdl",
 	"models/survivors/raisin.mdl",
 	"models/survivors/emilia.mdl",
 	"models/survivors/m119howitzer_static_01.mdl",
@@ -83,11 +83,11 @@ static const char sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 	"models/survivors/hsi.mdl",
 	"models/survivors/icg.mdl",
 	"models/survivors/hk416.mdl",
-	"models/survivors/ump9.mdl",
-	"models/survivors/g41.mdl",
 	"models/survivors/g11.mdl",
+	"models/survivors/ump9_2.mdl",
+	"models/survivors/ump45_2.mdl",
+	"models/survivors/g41.mdl",
 	"models/survivors/wa2000.mdl",
-	"models/survivors/ump45.mdl",
 	"models/survivors/m4sopmod2.mdl",
 	"models/survivors/m1903.mdl",
 	"models/survivors/ump40.mdl",
@@ -96,7 +96,8 @@ static const char sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 	"models/survivors/inubashiri_momiji.mdl",
 	"models/survivors/murasaki_shion2.mdl",
 	"models/survivors/ar15.mdl",
-	"models/survivors/m4a1.mdl"
+	"models/survivors/m4a1.mdl",
+	"models/survivors/minato_aqua2.mdl"
 };
 //Z:***ADD NEW ENUM HERE!!!***
 enum LMCCustomModelType
@@ -110,11 +111,11 @@ enum LMCCustomModelType
 	MODEL_HSI,
 	MODEL_ICG,
 	MODEL_HK416,
-	MODEL_UMP9,
-	MODEL_G41,
 	MODEL_G11,
-	MODEL_WA2000,
+	MODEL_UMP9,
 	MODEL_UMP45,
+	MODEL_G41,
+	MODEL_WA2000,
 	MODEL_M4SOPMOD2,
 	MODEL_M1903,
 	MODEL_UMP40,
@@ -123,7 +124,8 @@ enum LMCCustomModelType
 	MODEL_INUBASHIRIMOMIJI,
 	MODEL_MURASAKISHION,
 	MODEL_AR15,
-	MODEL_M4A1
+	MODEL_M4A1,
+	MODEL_MINATOAQUA
 };
 
 static const char sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
@@ -516,11 +518,12 @@ public Action ShowMenu(int iClient, int iArgs)
 
 	AddMenuItem(hMenu, "1", Translate(iClient, "%t", "Normal Models"));
 
-	//Z:***ADD MENU OPTION HERE*** last used 48
+	//Z:***ADD MENU OPTION HERE*** last used 49
 
 	AddMenuItem(hMenu, "45", "Inubashiri Momiji(2hu)");
 	AddMenuItem(hMenu, "26", "Gene(PSO2)");
 	AddMenuItem(hMenu, "44", "Akai Haato(Hololive)");
+	AddMenuItem(hMenu, "49", "Minato Aqua(Hololive)");
 	AddMenuItem(hMenu, "46", "Murasaki Shion(Hololive)");
 	AddMenuItem(hMenu, "48", "M4A1(GFL)");
 	AddMenuItem(hMenu, "47", "AR15(GFL)");
@@ -541,6 +544,7 @@ public Action ShowMenu(int iClient, int iArgs)
 	AddMenuItem(hMenu, "28", "Emilia(ReZero)");
 	AddMenuItem(hMenu, "43", "TDA Sweet Migu Loli");
 	AddMenuItem(hMenu, "29", "M119 Howitzer");
+	
 
 	AddMenuItem(hMenu, "2", Translate(iClient, "%t", "Random Common"));
 	if(IsModelPrecached(sSpecialPaths[LMCSpecialModelType_Witch]))
@@ -1365,7 +1369,6 @@ void ModelIndex(int iClient, int iCaseNum, bool bUsingMenu=false)
 			bAutoApplyMsg[iClient] = false;
 		}
 
-		//Z:***ADD NEW CASE HERE. SAVE AND COMPILE
 		case 48:
 		{
 			if(IsModelValid(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_M4A1)))
@@ -1379,6 +1382,23 @@ void ModelIndex(int iClient, int iCaseNum, bool bUsingMenu=false)
 			SetExternalView(iClient);
 			bAutoApplyMsg[iClient] = false;
 		}
+
+		case 49:
+		{
+			if(IsModelValid(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_MINATOAQUA)))
+				LMC_L4D2_SetTransmit(iClient, LMC_SetClientOverlayModel(iClient, sCustomPaths[MODEL_MINATOAQUA]));
+
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Minato Aqua(Hololive)");
+			
+			SetExternalView(iClient);
+			bAutoApplyMsg[iClient] = false;
+		}
+
+		//Z:***ADD NEW CASE HERE. SAVE AND COMPILE
+		
 	}
 	bAutoApplyMsg[iClient] = false;
 }
