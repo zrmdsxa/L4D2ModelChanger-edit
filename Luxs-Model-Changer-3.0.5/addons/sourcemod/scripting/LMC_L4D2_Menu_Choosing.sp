@@ -48,7 +48,7 @@
 #define COMMON_MODEL_PATH_SIZE 34
 
 //Z:***INCREASE NUMBER FOR EACH MODEL!!!***
-#define CUSTOM_MODEL_PATH_SIZE 24	
+#define CUSTOM_MODEL_PATH_SIZE 25	
 
 enum ZOMBIECLASS
 {
@@ -97,7 +97,8 @@ static const char sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 	"models/survivors/murasaki_shion2.mdl",
 	"models/survivors/ar15.mdl",
 	"models/survivors/m4a1.mdl",
-	"models/survivors/minato_aqua2.mdl"
+	"models/survivors/minato_aqua2.mdl",
+	"models/survivors/test.mdl"
 };
 //Z:***ADD NEW ENUM HERE!!!***
 enum LMCCustomModelType
@@ -125,7 +126,8 @@ enum LMCCustomModelType
 	MODEL_MURASAKISHION,
 	MODEL_AR15,
 	MODEL_M4A1,
-	MODEL_MINATOAQUA
+	MODEL_MINATOAQUA,
+	MODEL_TEST
 };
 
 static const char sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
@@ -518,7 +520,7 @@ public Action ShowMenu(int iClient, int iArgs)
 
 	AddMenuItem(hMenu, "1", Translate(iClient, "%t", "Normal Models"));
 
-	//Z:***ADD MENU OPTION HERE*** last used 49
+	//Z:***ADD MENU OPTION HERE*** last used 50
 
 	AddMenuItem(hMenu, "45", "Inubashiri Momiji(2hu)");
 	AddMenuItem(hMenu, "26", "Gene(PSO2)");
@@ -544,6 +546,7 @@ public Action ShowMenu(int iClient, int iArgs)
 	AddMenuItem(hMenu, "28", "Emilia(ReZero)");
 	AddMenuItem(hMenu, "43", "TDA Sweet Migu Loli");
 	AddMenuItem(hMenu, "29", "M119 Howitzer");
+	AddMenuItem(hMenu, "50", "TEST");
 	
 
 	AddMenuItem(hMenu, "2", Translate(iClient, "%t", "Random Common"));
@@ -1392,6 +1395,20 @@ void ModelIndex(int iClient, int iCaseNum, bool bUsingMenu=false)
 				return;
 
 			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Minato Aqua(Hololive)");
+			
+			SetExternalView(iClient);
+			bAutoApplyMsg[iClient] = false;
+		}
+
+		case 50:
+		{
+			if(IsModelValid(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_TEST)))
+				LMC_L4D2_SetTransmit(iClient, LMC_SetClientOverlayModel(iClient, sCustomPaths[MODEL_TEST]));
+
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04TEST");
 			
 			SetExternalView(iClient);
 			bAutoApplyMsg[iClient] = false;

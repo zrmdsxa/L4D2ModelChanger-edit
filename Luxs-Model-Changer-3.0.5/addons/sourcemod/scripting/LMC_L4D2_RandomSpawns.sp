@@ -38,20 +38,17 @@
 #define UNCOMMON_MODEL_PATH_SIZE 5
 #define COMMON_MODEL_PATH_SIZE 33
 
+//Z: Only for Hunter/Smoker/Boomer/Tank since they can use regular models
+
 //Z:***INCREASE NUMBER FOR EACH MODEL!!!***
-#define CUSTOM_MODEL_PATH_SIZE 2
+#define CUSTOM_MODEL_PATH_SIZE 3
 
 //Z:***ADD NEW MODEL PATHS HERE!!!***
 static const char sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 {
 	"models/infected/kcboatslutkashima.mdl",
-	"models/infected/kcboatslutyuudachi.mdl"
-};
-
-enum LMCCustomModelType
-{
-	KCBOATSLUTKASHIMA = 0,
-	KCBOATSLUTYUUDACHI
+	"models/infected/kcboatslutyuudachi.mdl",
+	"models/infected/kcboatslutshitkaze.mdl"
 };
 
 enum ZOMBIECLASS
@@ -369,7 +366,11 @@ public void ePlayerSpawn(Handle hEvent, const char[] sEventName, bool bDontBroad
 					if(!g_bAllowHunter)
 						return;
 				}
-				case ZOMBIECLASS_CHARGER, ZOMBIECLASS_JOCKEY, ZOMBIECLASS_SPITTER, ZOMBIECLASS_UNKNOWN:
+				case ZOMBIECLASS_SPITTER:
+				{
+				
+				}
+				case ZOMBIECLASS_CHARGER, ZOMBIECLASS_JOCKEY, ZOMBIECLASS_UNKNOWN:
 				{
 					return;
 				}
@@ -418,9 +419,27 @@ public void NextFrame(int iUserID)
 		case 3:
 			if(GetRandomInt(1, 100) <= g_iChanceInfected)
 			{
-				LogMessage("ChooseRNGModel");
+				switch(GetEntProp(iClient, Prop_Send, "m_zombieClass"))//1.4
+				{
+
+					case ZOMBIECLASS_SPITTER:
+					{
+						LogMessage("Choose Spitter");
+						strcopy(sModel, sizeof(sModel), "models/infected/pekora_spitter.mdl");
+					}
+
+					default:
+					{
+						LogMessage("Zombie class:%i",GetEntProp(iClient, Prop_Send, "m_zombieClass"));
+						LogMessage("ChooseRNGModel");
+						strcopy(sModel, sizeof(sModel), sCustomPaths[GetRandomInt(1, CUSTOM_MODEL_PATH_SIZE)-1]);
+					}
+				}
+				
+				/*
 				if(!ChooseRNGModel(sModel))
 					return;
+				*/
 			}
 		default:
 			return;
@@ -457,8 +476,9 @@ bool ChooseRNGModel(char sModel[PLATFORM_MAX_PATH])
 	}
 	*/
 
-		strcopy(sModel, sizeof(sModel), sCustomPaths[GetRandomInt(1, CUSTOM_MODEL_PATH_SIZE)-1]);
-		
+
+	strcopy(sModel, sizeof(sModel), sCustomPaths[GetRandomInt(1, CUSTOM_MODEL_PATH_SIZE)-1]);
+
 
 	return true;
 }
