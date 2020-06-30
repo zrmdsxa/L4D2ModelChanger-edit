@@ -424,14 +424,14 @@ public void NextFrame(int iUserID)
 
 					case ZOMBIECLASS_SPITTER:
 					{
-						LogMessage("Choose Spitter");
+						//LogMessage("Choose Spitter");
 						strcopy(sModel, sizeof(sModel), "models/infected/pekora_spitter.mdl");
 					}
 
 					default:
 					{
-						LogMessage("Zombie class:%i",GetEntProp(iClient, Prop_Send, "m_zombieClass"));
-						LogMessage("ChooseRNGModel");
+						//LogMessage("Zombie class:%i",GetEntProp(iClient, Prop_Send, "m_zombieClass"));
+						//LogMessage("ChooseRNGModel");
 						strcopy(sModel, sizeof(sModel), sCustomPaths[GetRandomInt(1, CUSTOM_MODEL_PATH_SIZE)-1]);
 					}
 				}
