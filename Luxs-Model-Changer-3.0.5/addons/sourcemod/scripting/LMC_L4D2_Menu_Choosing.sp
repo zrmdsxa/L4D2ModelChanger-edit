@@ -48,7 +48,7 @@
 #define COMMON_MODEL_PATH_SIZE 34
 
 //Z:***INCREASE NUMBER FOR EACH MODEL!!!***
-#define CUSTOM_MODEL_PATH_SIZE 25	
+#define CUSTOM_MODEL_PATH_SIZE 27	
 
 enum ZOMBIECLASS
 {
@@ -89,16 +89,18 @@ static const char sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 	"models/survivors/g41.mdl",
 	"models/survivors/wa2000.mdl",
 	"models/survivors/m4sopmod2.mdl",
-	"models/survivors/m1903.mdl",
+	"models/survivors/m1903_2.mdl",
 	"models/survivors/ump40.mdl",
 	"models/survivors/tdasweetmiguloli.mdl",
-	"models/survivors/akai_haato3.mdl",
+	"models/survivors/akai_haato4.mdl",
 	"models/survivors/inubashiri_momiji.mdl",
-	"models/survivors/murasaki_shion2.mdl",
+	"models/survivors/murasaki_shion3.mdl",
 	"models/survivors/ar15.mdl",
 	"models/survivors/m4a1.mdl",
 	"models/survivors/minato_aqua2.mdl",
-	"models/survivors/test.mdl"
+	"models/survivors/test.mdl",
+	"models/survivors/shirakami_fubuki.mdl",
+	"models/survivors/natsuiro_matsuri.mdl"
 };
 //Z:***ADD NEW ENUM HERE!!!***
 enum LMCCustomModelType
@@ -127,7 +129,9 @@ enum LMCCustomModelType
 	MODEL_AR15,
 	MODEL_M4A1,
 	MODEL_MINATOAQUA,
-	MODEL_TEST
+	MODEL_TEST,
+	MODEL_SHIRAKAMIFUBUKI,
+	MODEL_NATSUIROMATSURI
 };
 
 static const char sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
@@ -520,11 +524,13 @@ public Action ShowMenu(int iClient, int iArgs)
 
 	AddMenuItem(hMenu, "1", Translate(iClient, "%t", "Normal Models"));
 
-	//Z:***ADD MENU OPTION HERE*** last used 50
+	//Z:***ADD MENU OPTION HERE*** last used 52
 
 	AddMenuItem(hMenu, "45", "Inubashiri Momiji(2hu)");
 	AddMenuItem(hMenu, "26", "Gene(PSO2)");
 	AddMenuItem(hMenu, "44", "Akai Haato(Hololive)");
+	AddMenuItem(hMenu, "52", "Shirakami Fubuki(Hololive)");
+	AddMenuItem(hMenu, "51", "Natsuiro Matsuri(Hololive)");
 	AddMenuItem(hMenu, "49", "Minato Aqua(Hololive)");
 	AddMenuItem(hMenu, "46", "Murasaki Shion(Hololive)");
 	AddMenuItem(hMenu, "48", "M4A1(GFL)");
@@ -1409,6 +1415,34 @@ void ModelIndex(int iClient, int iCaseNum, bool bUsingMenu=false)
 				return;
 
 			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04TEST");
+			
+			SetExternalView(iClient);
+			bAutoApplyMsg[iClient] = false;
+		}
+
+		case 51:
+		{
+			if(IsModelValid(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_SHIRAKAMIFUBUKI)))
+				LMC_L4D2_SetTransmit(iClient, LMC_SetClientOverlayModel(iClient, sCustomPaths[MODEL_SHIRAKAMIFUBUKI]));
+
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Shirakami Fubuki(Hololive)");
+			
+			SetExternalView(iClient);
+			bAutoApplyMsg[iClient] = false;
+		}
+
+		case 52:
+		{
+			if(IsModelValid(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_NATSUIROMATSURI)))
+				LMC_L4D2_SetTransmit(iClient, LMC_SetClientOverlayModel(iClient, sCustomPaths[MODEL_NATSUIROMATSURI]));
+
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Natsuiro Matsuri(Hololive)");
 			
 			SetExternalView(iClient);
 			bAutoApplyMsg[iClient] = false;
