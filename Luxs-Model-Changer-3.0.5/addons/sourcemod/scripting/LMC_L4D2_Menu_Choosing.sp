@@ -37,7 +37,7 @@
 
 
 #define PLUGIN_NAME "LMC_L4D2_Menu_Choosing"
-#define PLUGIN_VERSION "1.0.8 Awoo Server"
+#define PLUGIN_VERSION "1.1 Awoo Server"
 
 //change me to whatever flag you want
 #define COMMAND_ACCESS ADMFLAG_CHAT
@@ -46,9 +46,6 @@
 #define SPECIAL_MODEL_PATH_SIZE 8
 #define UNCOMMON_MODEL_PATH_SIZE 6
 #define COMMON_MODEL_PATH_SIZE 34
-
-//Z:***INCREASE NUMBER FOR EACH MODEL!!!***
-#define CUSTOM_MODEL_PATH_SIZE 27	
 
 enum ZOMBIECLASS
 {
@@ -70,6 +67,9 @@ enum LMCModelSectionType
 	LMCModelSectionType_Common,
 	LMCModelSectionType_Custom
 };
+
+//Z:***INCREASE NUMBER FOR EACH MODEL!!!***
+#define CUSTOM_MODEL_PATH_SIZE 29	
 
 //Z:***ADD NEW MODEL PATHS HERE!!!***
 static const char sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
@@ -100,7 +100,9 @@ static const char sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 	"models/survivors/minato_aqua2.mdl",
 	"models/survivors/test.mdl",
 	"models/survivors/shirakami_fubuki.mdl",
-	"models/survivors/natsuiro_matsuri.mdl"
+	"models/survivors/natsuiro_matsuri.mdl",
+	"models/survivors/kurokami_fubuki.mdl",
+	"models/survivors/yuzuki_choco.mdl"
 };
 //Z:***ADD NEW ENUM HERE!!!***
 enum LMCCustomModelType
@@ -131,7 +133,9 @@ enum LMCCustomModelType
 	MODEL_MINATOAQUA,
 	MODEL_TEST,
 	MODEL_SHIRAKAMIFUBUKI,
-	MODEL_NATSUIROMATSURI
+	MODEL_NATSUIROMATSURI,
+	MODEL_KUROKAMIFUBUKI,
+	MODEL_YUZUKICHOCO
 };
 
 static const char sHumanPaths[HUMAN_MODEL_PATH_SIZE][] =
@@ -524,15 +528,17 @@ public Action ShowMenu(int iClient, int iArgs)
 
 	AddMenuItem(hMenu, "1", Translate(iClient, "%t", "Normal Models"));
 
-	//Z:***ADD MENU OPTION HERE*** last used 52
+	//Z:***ADD MENU OPTION HERE*** last used 54
 
 	AddMenuItem(hMenu, "45", "Inubashiri Momiji(2hu)");
 	AddMenuItem(hMenu, "26", "Gene(PSO2)");
 	AddMenuItem(hMenu, "44", "Akai Haato(Hololive)");
-	AddMenuItem(hMenu, "52", "Shirakami Fubuki(Hololive)");
-	AddMenuItem(hMenu, "51", "Natsuiro Matsuri(Hololive)");
-	AddMenuItem(hMenu, "49", "Minato Aqua(Hololive)");
+	AddMenuItem(hMenu, "52", "Natsuiro Matsuri(Hololive)");
+	AddMenuItem(hMenu, "51", "Shirakami Fubuki(Hololive)");
+	AddMenuItem(hMenu, "53", "Kurokami Fubuki(Hololive)");
+	AddMenuItem(hMenu, "54", "Yuzuki Choco(Hololive)");
 	AddMenuItem(hMenu, "46", "Murasaki Shion(Hololive)");
+	AddMenuItem(hMenu, "49", "Minato Aqua(Hololive)");
 	AddMenuItem(hMenu, "48", "M4A1(GFL)");
 	AddMenuItem(hMenu, "47", "AR15(GFL)");
 	AddMenuItem(hMenu, "37", "G11(GFL)");
@@ -1443,6 +1449,34 @@ void ModelIndex(int iClient, int iCaseNum, bool bUsingMenu=false)
 				return;
 
 			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Natsuiro Matsuri(Hololive)");
+			
+			SetExternalView(iClient);
+			bAutoApplyMsg[iClient] = false;
+		}
+
+		case 53:
+		{
+			if(IsModelValid(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_KUROKAMIFUBUKI)))
+				LMC_L4D2_SetTransmit(iClient, LMC_SetClientOverlayModel(iClient, sCustomPaths[MODEL_KUROKAMIFUBUKI]));
+
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Kurokami Fubuki(Hololive)");
+			
+			SetExternalView(iClient);
+			bAutoApplyMsg[iClient] = false;
+		}
+
+		case 54:
+		{
+			if(IsModelValid(iClient, LMCModelSectionType_Custom, view_as<int>(MODEL_YUZUKICHOCO)))
+				LMC_L4D2_SetTransmit(iClient, LMC_SetClientOverlayModel(iClient, sCustomPaths[MODEL_YUZUKICHOCO]));
+
+			if(!bUsingMenu && !bAutoApplyMsg[iClient])
+				return;
+
+			PrintToChat(iClient, "\x04[LMC] \x03Model is \x04Yuzuki Choco(Hololive)");
 			
 			SetExternalView(iClient);
 			bAutoApplyMsg[iClient] = false;
