@@ -82,7 +82,7 @@ static const char sCustomPaths[CUSTOM_MODEL_PATH_SIZE][] =
 	"models/survivors/nyn.mdl",
 	"models/survivors/hsi.mdl",
 	"models/survivors/icg.mdl",
-	"models/survivors/hk416.mdl",
+	"models/survivors/hk416_2.mdl",
 	"models/survivors/g11.mdl",
 	"models/survivors/ump9_2.mdl",
 	"models/survivors/ump45_2.mdl",
