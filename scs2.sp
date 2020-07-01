@@ -53,7 +53,7 @@ ConVar convarCookies;
 //#define MODEL_ "odels/survivors/.mdl"
 
 #define MODEL_GENE "models/survivors/gene6.mdl"
-#define MODEL_HK416 "models/survivors/hk416.mdl"
+#define MODEL_HK416 "models/survivors/hk416_2.mdl"
 #define MODEL_UMP9 "models/survivors/ump9_2.mdl"
 #define MODEL_G41 "models/survivors/g41.mdl"
 #define MODEL_G11 "models/survivors/g11.mdl"
@@ -63,6 +63,7 @@ ConVar convarCookies;
 
 #define MODEL_KCBOATSLUTKASHIMA "models/infected/kcboatslutkashima.mdl"
 #define MODEL_KCBOATSLUTYUUDACHI "models/infected/kcboatslutyuudachi.mdl"
+#define MODEL_KCBOATSLUTSHITKAZE "models/infected/kcboatslutshitkaze.mdl"
 
 #define     NICK     	0
 #define     ROCHELLE    1
@@ -84,6 +85,7 @@ ConVar convarCookies;
 #define UMP40 15
 #define KCBOATSLUTKASHIMA 16
 #define KCBOATSLUTYUUDACHI 17
+#define KCBOATSLUTSHITKAZE 18
 
 
 int    g_iSelectedClient[MAXPLAYERS+1];
@@ -240,7 +242,7 @@ public Action UMP40Use(int client, int args)
 public Action InfectedUse(int client, int args)  
 {  
 
-	switch (GetRandomInt(0, 1))
+	switch (GetRandomInt(0, 2))
 	{
     	case 0:
     	{
@@ -251,6 +253,11 @@ public Action InfectedUse(int client, int args)
     	{
         	SurvivorChange(client, KCBOATSLUTYUUDACHI, MODEL_KCBOATSLUTYUUDACHI, "BOATSHIT");
         	LogMessage("boatslut yuudachi");
+    	}
+    	case 2:
+    	{
+        	SurvivorChange(client, KCBOATSLUTSHITKAZE, MODEL_KCBOATSLUTSHITKAZE, "BOATSHIT");
+        	LogMessage("boatslut shitkaze");
     	}
 	} 
 	
